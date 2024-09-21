@@ -58,6 +58,7 @@ func main() {
 	e.GET("/", srv.Home)
 	e.POST("/api/user", srv.CreateUser)
 	e.GET("/api/user/:id", srv.FindUserById)
+	e.DELETE("/api/user/:id", srv.DeleteUserById)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

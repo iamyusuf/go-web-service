@@ -24,3 +24,9 @@ func (s *Server) FindUserById(c echo.Context) error {
 	s.Db.First(&user, id)
 	return c.JSON(http.StatusOK, user)
 }
+
+func (s *Server) DeleteUserById(c echo.Context) error {
+	id := c.Param("id")
+	s.Db.Delete(&model.User{}, id)
+	return c.JSON(http.StatusOK, nil)
+}
