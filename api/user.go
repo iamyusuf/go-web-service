@@ -18,6 +18,21 @@ func (s *Server) CreateUser(c echo.Context) error {
 	return c.JSON(http.StatusCreated, user)
 }
 
+func (s *Server) UpdateUser(c echo.Context) error {
+	id := c.Param("id")
+	var user model.User
+	s.Db.First(&user, id)
+
+	err := c.Bind(&user)
+
+	if err != nil {
+		return err
+	}
+
+	s.Db.Save(&user)
+	return c.JSON(http.StatusOK, user)
+}
+
 func (s *Server) FindUserById(c echo.Context) error {
 	id := c.Param("id")
 	user := model.User{}

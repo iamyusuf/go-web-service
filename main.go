@@ -57,6 +57,7 @@ func main() {
 	e := echo.New()
 	e.GET("/", srv.Home)
 	e.POST("/api/user", srv.CreateUser)
+	e.PUT("/api/user/:id", srv.UpdateUser)
 	e.GET("/api/user/:id", srv.FindUserById)
 	e.DELETE("/api/user/:id", srv.DeleteUserById)
 
