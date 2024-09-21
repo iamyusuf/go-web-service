@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/iamyusuf/gws/api"
+	"github.com/iamyusuf/gws/types/model"
 	"github.com/labstack/echo/v4"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
-	"net/http"
 )
 
 type Product struct {
@@ -49,12 +50,12 @@ func main() {
 	}
 
 	fmt.Printf("connected to the database")
-	panicOnErr(db.AutoMigrate(&Product{}), "failed to migrate")
+	panicOnErr(db.AutoMigrate(&Product{}, &model.User{}), "failed to migrate")
+
+	srv := api.NewServer(db)
 
 	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+	e.GET("/", srv.Home)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
