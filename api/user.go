@@ -15,7 +15,7 @@ func (s *Server) CreateUser(c echo.Context) error {
 		return err
 	}
 
-	return nil
+	return c.JSON(http.StatusCreated, user)
 }
 
 func (s *Server) FindUserById(c echo.Context) error {
