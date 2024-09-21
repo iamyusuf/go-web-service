@@ -8,7 +8,6 @@ import (
 	"github.com/iamyusuf/gws/types/model"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"log"
 )
 
 func panicOnErr(err error, msg string) {
@@ -25,19 +24,14 @@ func main() {
 	panicOnErr(db.AutoMigrate(&model.User{}), "failed to migrate")
 
 	srv := api.NewServer(db)
-
 	e := echo.New()
 
 	logWriter, err := services.NewLogWriter()
 
-	if err != nil {
-		log.Fatalf("Failed to create log writer: %v", err)
+	if err == nil {
+		e.Logger.SetOutput(logWriter)
 	}
 
-	defer logWriter.Close()
-
-	// Set Echo's logger output to the custom log writer
-	e.Logger.SetOutput(logWriter)
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
