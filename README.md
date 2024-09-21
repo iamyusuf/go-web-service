@@ -1,1 +1,1 @@
-this is a go web pracie
+this is a practice web service
