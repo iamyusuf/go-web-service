@@ -56,6 +56,7 @@ func main() {
 
 	e := echo.New()
 	e.GET("/", srv.Home)
+	e.POST("/api/user", srv.CreateUser)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
