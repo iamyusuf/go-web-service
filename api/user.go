@@ -2,17 +2,28 @@ package api
 
 import (
 	"github.com/iamyusuf/gws/types/model"
+	"github.com/iamyusuf/gws/utils"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
 func (s *Server) CreateUser(c echo.Context) error {
 	var user model.User
-	err := c.Bind(&user)
-	s.Db.Create(&user)
+
+	if err := c.Bind(&user); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid input"})
+	}
+
+	hashedPassword, err := utils.HashPassword(user.Password)
 
 	if err != nil {
-		return err
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to hash password"})
+	}
+
+	user.Password = hashedPassword
+
+	if result := s.Db.Create(&user); result.Error != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Could not save user"})
 	}
 
 	return c.JSON(http.StatusCreated, user)
